@@ -1,0 +1,10 @@
+name: spongedetect
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - numpy
+  - matplotlib
+  - scikit-learn
+  - tensorflow
+  - scikit-image
