@@ -14,7 +14,10 @@ from collections import Counter
 
 from pylab import show
 
-import cv2
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+
 
 from skimage import io
 from skimage import filters
@@ -113,7 +116,20 @@ for fold_num, (train_index, test_index) in enumerate(skf.split(X, y)):
 
     # a new, untrained model
     # model = sklearn.svm.SVC(class_weight='balanced')
-    model = sklearn.neural_network.MLPClassifier(solver='sgd', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
+    # model = sklearn.neural_network.MLPClassifier(solver='sgd', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
+
+    model = keras.Sequential(
+    [
+        layers.Dense(16, activation="relu", name="layer1"),
+        layers.Dense(3, activation="relu", name="layer2"),
+        layers.Dense(4, name="layer3"),
+    ]
+)
+    optimizer = keras.optimizers.Adam()
+    model.compile(loss='categorical_crossentropy',
+              optimizer=optimizer,
+              metrics=['accuracy'])
+
     model.fit(X_train, y_train)
 
     # compute training error by predicting each item in the training set
@@ -140,6 +156,5 @@ print(f"overall accuracy: {sklearn.metrics.accuracy_score(y_true_all, y_pred_all
 print(f"overall balanced accuracy: {sklearn.metrics.balanced_accuracy_score(y_true_all, y_pred_all):.3f}")
 print(f"overall confusion matrix:\n{cm_all}")
 print(class_labels)
-
 
 plotMatrix(class_labels, cm_all, 'confusion_matrix', 'Confusion Matrix')
