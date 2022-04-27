@@ -117,20 +117,31 @@ for fold_num, (train_index, test_index) in enumerate(skf.split(X, y)):
     # a new, untrained model
     # model = sklearn.svm.SVC(class_weight='balanced')
     # model = sklearn.neural_network.MLPClassifier(solver='sgd', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
+    # model.fit(X_train, y_train)
 
-    model = keras.Sequential(
-    [
-        layers.Dense(16, activation="relu", name="layer1"),
-        layers.Dense(3, activation="relu", name="layer2"),
-        layers.Dense(4, name="layer3"),
-    ]
-)
-    optimizer = keras.optimizers.Adam()
-    model.compile(loss='categorical_crossentropy',
-              optimizer=optimizer,
-              metrics=['accuracy'])
+    model = keras.Sequential([
+            layers.Conv2D(32, 3, input_shape=(256, 256, 3)),
+            layers.MaxPooling2D(pool_size=2),
+            layers.Flatten(),
+            layers.Dense(10, activation='softmax'),
+            ])
 
-    model.fit(X_train, y_train)
+
+    model.compile(
+        'adam',
+        loss='categorical_crossentropy',
+        metrics=['accuracy'],
+    )
+
+    model.summary()
+
+    
+    # history = model.fit(train_generator,
+    #                 validation_data=validation_generator,
+    #                 steps_per_epoch=150 // bs,
+    #                 epochs=30,
+    #                 validation_steps=50 // bs,
+    #                 verbose=2)
 
     # compute training error by predicting each item in the training set
     # using the model that was just trained on the training set
