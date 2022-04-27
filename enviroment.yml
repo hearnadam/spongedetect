@@ -3,8 +3,12 @@ channels:
   - defaults
   - conda-forge
 dependencies:
+  - pip
   - numpy
   - matplotlib
   - scikit-learn
   - tensorflow
   - scikit-image
+  - pip:
+    - keras-tuner
+    
