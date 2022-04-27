@@ -38,9 +38,6 @@ for label_class in listdir(data_path):
     # get each file
     for spongeimage in listdir(folder_path):
 
-        # rate, data = scipy.io.wavfile.read(path.join(folder_path, spongeimage))
-        # print(f"loaded file '{wav_file}' ({rate} Hz, {data.shape[-1]} samples)")
-
         # load image from file
         image = io.imread(path.join(folder_path, spongeimage))
 
@@ -110,38 +107,14 @@ for fold_num, (train_index, test_index) in enumerate(skf.split(X, y)):
     scaler.fit(X_train)
 
     # Standardize features by removing the mean and scaling to unit variance.
-    X_train = scaler.transform(X_train)  
+    X_train = scaler.transform(X_train)
     # apply same transformation to test data
     X_test = scaler.transform(X_test)
 
     # a new, untrained model
-    # model = sklearn.svm.SVC(class_weight='balanced')
+    model = sklearn.svm.SVC(class_weight='balanced')
     # model = sklearn.neural_network.MLPClassifier(solver='sgd', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
-    # model.fit(X_train, y_train)
-
-    model = keras.Sequential([
-            layers.Conv2D(32, 3, input_shape=(256, 256, 3)),
-            layers.MaxPooling2D(pool_size=2),
-            layers.Flatten(),
-            layers.Dense(10, activation='softmax'),
-            ])
-
-
-    model.compile(
-        'adam',
-        loss='categorical_crossentropy',
-        metrics=['accuracy'],
-    )
-
-    model.summary()
-
-    
-    # history = model.fit(train_generator,
-    #                 validation_data=validation_generator,
-    #                 steps_per_epoch=150 // bs,
-    #                 epochs=30,
-    #                 validation_steps=50 // bs,
-    #                 verbose=2)
+    model.fit(X_train, y_train)
 
     # compute training error by predicting each item in the training set
     # using the model that was just trained on the training set
