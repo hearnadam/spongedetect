@@ -24,7 +24,7 @@ training = tf.keras.preprocessing.image_dataset_from_directory(
     batch_size=batch_size,
 )
 
-testing = tf.keras.preprocessing.image_dataset_from_directory(
+validation = tf.keras.preprocessing.image_dataset_from_directory(
     data_path,
     validation_split=0.2,
     subset="validation",
@@ -47,9 +47,9 @@ model.compile(
 )
 
 history = model.fit(training,
-                    steps_per_epoch=2,
-                    epochs=8,
-                    validation_steps=10,
-                    verbose=2)
-
+                validation_data=validation,
+                steps_per_epoch=5,
+                epochs=100,
+                validation_steps=10,
+                verbose=2)
 
